@@ -3,6 +3,12 @@
 > End-to-End PDF Accessibility Validation System using **PAC (UI Tool) + PREP (JAR API) + Automated Reporting + Slack Integration**
 
 ---
+```bash
+git clone https://github.com/akashchowdarygogineni/accessibility-automation-project.git
+cd accessibility-automation-project
+pip install -r requirements.txt
+python pipeline.py v1
+```
 
 ## 📌 Executive Summary
 
