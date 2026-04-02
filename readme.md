@@ -15,7 +15,7 @@ Add architecture diagram here
 <!-- Example: docs/architecture-diagram.png -->
 
 ## Workflow
-![Workflow Diagram](docs/workflow-diagram.png)
+![Workflow Diagram](docs/workflow.png)
 
 1. Input PDFs are collected from a target version folder (for example, `v1`, `v1.5`).
 2. `pac.py` runs PAC desktop checks and generates PAC outputs.
@@ -36,7 +36,7 @@ Add architecture diagram here
 |-- s3_uploader.py
 |-- readme.md
 |-- docs/
-|   `-- workflow-diagram.png
+|   `-- workflow.png
 |-- s3/
 |-- v1/
 |   |-- pac_processed/
@@ -147,7 +147,7 @@ SLACK_ENABLED=true
 - Add richer analytics and trend summaries in reports.
 
 ## Author
-- Name: Add your name here
+- Name: akash gogineni
 - Role: Accessibility Automation Engineer
-- Contact: Add your email or LinkedIn here
+- Contact: www.linkedin.com/in/akash-gogineni-b68102300
 
