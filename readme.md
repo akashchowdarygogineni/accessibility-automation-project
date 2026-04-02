@@ -40,19 +40,7 @@ A scalable automation pipeline that:
 
 ## ⚙️ System Architecture
 
-```id="w3z6n8"
-Input PDFs (version folder)
-        ↓
-PAC Stage (pac.py)
-        ↓
-PREP Stage (prep.py)
-        ↓
-Comparison Stage (slack.py)
-        ↓
-Final Reports + Slack Notification
-```
-
-📌 Refer to architecture diagram (*Documentation Page 1*) for full data flow.
+<img width="1677" height="498" alt="workflow" src="https://github.com/user-attachments/assets/fa13442a-6a4c-46a6-a4d1-39198425056e" />
 
 ---
 
