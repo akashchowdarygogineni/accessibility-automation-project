@@ -1,150 +1,319 @@
-# ♿ Accessibility Automation Project
+# 🚀 Accessibility Automation Pipeline
 
-## Overview
-The Accessibility Automation Project streamlines PDF accessibility validation using a robust 3-stage pipeline:
+> End-to-End PDF Accessibility Validation System using **PAC (UI Tool) + PREP (JAR API) + Automated Reporting + Slack Integration**
 
-1. PAC stage: desktop automation with `pywinauto`
-2. PREP stage: Java JAR/API-based processing
-3. Comparison stage: result consolidation and report generation
+---
 
-The workflow is designed for bulk PDF processing, version-based execution, and operational reporting with Slack notifications.
+## 📌 Executive Summary
 
-## Architecture
-Add architecture diagram here
+This project automates accessibility validation of PDF files through a **three-stage pipeline**:
 
-<!-- Example: docs/architecture-diagram.png -->
+1. **PAC Stage** → Desktop-based validation (UI automation)
+2. **PREP Stage** → API/JAR-based validation
+3. **Comparison Stage** → Report consolidation + Slack notifications
 
-## Workflow
-![Workflow Diagram](docs/workflow.png)
+Each execution is **version-controlled (v1, v1.3, v1.5, etc.)**, ensuring traceability of inputs, outputs, and reports.
 
-1. Input PDFs are collected from a target version folder (for example, `v1`, `v1.5`).
-2. `pac.py` runs PAC desktop checks and generates PAC outputs.
-3. `prep.py` processes files through the PREP JAR/API.
-4. `slack.py` compares PAC and PREP outcomes.
-5. Consolidated Excel reports are generated.
-6. Slack notifications are sent for status and summary.
+---
 
-## Project Structure
-```text
-.
-|-- pipeline.py
-|-- pac.py
-|-- prep.py
-|-- slack.py
-|-- prep_slack.py
-|-- slack_only_runner.py
-|-- s3_uploader.py
-|-- readme.md
-|-- docs/
-|   `-- workflow.png
-|-- s3/
-|-- v1/
-|   |-- pac_processed/
-|   |-- prep_processed/
-|   |-- prep_results/
-|   `-- prep_skipped/
-`-- v1.1/
+## 🎯 Problem Statement
+
+* Manual PDF accessibility validation is **time-consuming and repetitive**
+* PAC requires **manual UI interaction**
+* No unified system exists to **combine PAC and PREP results**
+* Difficult to scale validation for **large volumes of PDFs**
+
+---
+
+## 💡 Solution
+
+A scalable automation pipeline that:
+
+* Processes PDFs in batch
+* Automates PAC using UI scripting
+* Integrates PREP via JAR API
+* Compares PAC vs PREP results
+* Generates multiple Excel reports
+* Sends Slack notifications
+
+---
+
+## ⚙️ System Architecture
+
+```id="w3z6n8"
+Input PDFs (version folder)
+        ↓
+PAC Stage (pac.py)
+        ↓
+PREP Stage (prep.py)
+        ↓
+Comparison Stage (slack.py)
+        ↓
+Final Reports + Slack Notification
 ```
 
-## Features
-- Version-based execution (`v1`, `v1.5`, etc.)
-- End-to-end orchestration across PAC, PREP, and comparison
-- Bulk PDF processing support
-- Excel report generation for audit and review
-- Slack notifications for execution updates
-- Error handling and retry mechanisms for stability
+📌 Refer to architecture diagram (*Documentation Page 1*) for full data flow.
 
-## Tech Stack
-- Language: Python
-- Libraries:
-  - `pandas`
-  - `openpyxl`
-  - `pywinauto`
-  - `requests`
-  - `python-dotenv`
-  - `slack_sdk`
-- Integrations:
-  - PAC desktop tool
-  - Java PREP JAR/API
-  - Slack API
+---
 
-## Installation Steps
-1. Clone the repository.
-2. Create a virtual environment.
-3. Activate the environment.
-4. Install dependencies.
-5. Configure `.env` values.
-6. Ensure PAC desktop tool and Java runtime are installed.
+## 🔄 End-to-End Workflow
 
-```bash
-python -m venv .venv
-.venv\Scripts\Activate.ps1
-pip install pandas openpyxl pywinauto requests python-dotenv slack_sdk
+1. Read PDFs from version folder
+2. Run PAC validation (`pac.py`)
+3. Run PREP validation (`prep.py`)
+4. Compare results (`slack.py`)
+5. Generate multiple reports
+6. Consolidate into final report
+7. Cleanup intermediate files
+
+---
+
+## 📂 Project Structure
+
+```id="5q0p8m"
+pipeline.py            → Full pipeline orchestration
+pac.py                 → PAC UI automation & extraction
+prep.py                → PREP JAR API processing
+slack.py               → Comparison & report generation
+
+prep_slack.py          → PREP + Slack (skip PAC)
+slack_only_runner.py   → Slack-only execution
 ```
 
-## Execution Commands
-```bash
-# Full pipeline: PAC + PREP + comparison
-python pipeline.py
+---
 
-# PAC stage only
-python pac.py
+## ▶️ Execution Commands (IMPORTANT)
 
-# PREP stage only
-python prep.py
+### 🔹 Full Pipeline (PAC → PREP → Slack)
 
-# Comparison and reporting only
-python slack.py
-
-# PREP + Slack flow
-python prep_slack.py
-
-# Comparison-only runner
-python slack_only_runner.py
+```bash id="7c2t2j"
+python pipeline.py <version>
 ```
 
-## Input and Output
-### Input
-- Source PDF files placed in version folders
-- Version identifier (`v1`, `v1.5`, etc.)
-- Environment configuration from `.env`
+Example:
 
-### Output
-- Creates stage-wise output folders (for example: `pac_processed`, `prep_processed`, `prep_results`, `prep_skipped`) inside the selected version directory
-- Generates multiple Excel output files for PAC summary, PREP summary, comparison reports, and final consolidated accessibility reporting
-- Stores consolidated artifacts for review and audit tracking
-
-Add output screenshots here
-
-## Slack Integration
-Use a `.env` file for Slack configuration:
-
-```env
-SLACK_BOT_TOKEN=xoxb-your-token-here
-SLACK_CHANNEL_ID=C0123456789
-SLACK_ENABLED=true
+```bash id="g3x0qk"
+python pipeline.py v1.5
 ```
 
-## Test Cases
-- Validate single-file pipeline execution.
-- Validate bulk PDF processing flow.
-- Validate version-based execution (`v1`, `v1.5`).
-- Validate retry behavior for transient failures.
-- Validate Slack notification and report generation.
+---
 
-## Known Limitations
-- PAC cannot run in server or headless mode.
-- PAC does not provide native CLI/API support for direct automation.
-- PAC requires a Windows UI environment and active desktop session.
-- PAC stage cannot run reliably inside standard CI/CD pipelines.
-- Overall workflow behavior can be affected by third-party tool changes.
+### 🔹 PAC Stage Only
 
-## Future Improvements
-- Add a centralized monitoring dashboard.
-- Introduce configurable workflow profiles per version/client.
-- Expand automated validation coverage with regression checks.
-- Improve scalability with controlled parallel processing.
-- Add richer analytics and trend summaries in reports.
+```bash id="zv7u3y"
+python pac.py <version>
+```
+
+Example:
+
+```bash id="n2xk5r"
+python pac.py v1
+```
+
+---
+
+### 🔹 PREP Stage Only
+
+#### Without JAR (auto-detect)
+
+```bash id="gpk7p6"
+python prep.py <version>
+```
+
+#### With JAR (Recommended)
+
+```bash id="x6k9z2"
+python prep.py <version> pdfremediation-0.0.1-SNAPSHOT.jar
+```
+
+Example:
+
+```bash id="1j9m0c"
+python prep.py v1 pdfremediation-0.0.1-SNAPSHOT.jar
+```
+
+---
+
+### 🔹 Slack / Comparison Stage Only
+
+```bash id="0l2k7f"
+python slack.py <version>
+```
+
+Example:
+
+```bash id="v9c3d1"
+python slack.py v1
+```
+
+---
+
+### 🔹 PREP + Slack (Skip PAC)
+
+```bash id="y8x6r2"
+python prep_slack.py <version> <jar_path>
+```
+
+Example:
+
+```bash id="m4n8p1"
+python prep_slack.py v1.5 pdfremediation-0.0.1-SNAPSHOT.jar
+```
+
+---
+
+### 🔹 Slack Only Runner (Using Existing Files)
+
+#### Auto-detect files
+
+```bash id="a5k8z9"
+python slack_only_runner.py <version>
+```
+
+#### With file names
+
+```bash id="b7m2q4"
+python slack_only_runner.py <version> PAC.xlsx PREP.xlsx
+```
+
+#### With full paths (Recommended)
+
+```bash id="c9r5x1"
+python slack_only_runner.py <version> <pac_excel_path> <prep_excel_path>
+```
+
+Example:
+
+```bash id="d2t6y8"
+python slack_only_runner.py v1 C:/project/v1/pac_results/PAC_Final_Summary_v1.xlsx C:/project/v1/prep_results/prep_final_summary_v1.xlsx
+```
+
+---
+
+## 📊 Input & Output Design
+
+### 📥 Input
+
+* `BASE_DIR/<version>/` → PDF files
+
+---
+
+### 📤 Output
+
+#### PAC Stage
+
+* `pac_results/PAC_Final_Summary_<version>.xlsx`
+* Per-file PAC outputs
+* `pac_processed/`, `pac_skipped/`
+
+#### PREP Stage
+
+* `prep_results/prep_final_summary_<version>.xlsx`
+* JSON outputs
+* `prep_processed/`, `prep_skipped/`
+
+#### Comparison Stage
+
+* `PrepPac_Comparison_Report_<version>.xlsx`
+* `PAC_PREP_Final_<version>.xlsx`
+* `final_accessibility_status_only_<version>.xlsx`
+* `version_summary_report_<version>.xlsx`
+* `Final_Accessibility_Report_<version>.xlsx`
+
+---
+
+## 🏆 Final Deliverable
+
+```id="e3u8k1"
+Final_Accessibility_Report_<version>.xlsx
+```
+
+---
+
+## 🛠️ Technology Stack
+
+* Python 3.x
+* pandas, openpyxl
+* pywinauto (PAC UI automation)
+* requests (API communication)
+* python-dotenv (.env handling)
+* slack_sdk (notifications)
+* Java JAR (PREP tool)
+
+---
+
+## 🔔 Slack Integration
+
+### 🔹 Configuration (.env)
+
+```id="t8k3p6"
+SLACK_TOKEN=xoxb-your-token
+CHANNEL_ID=your-channel-id
+```
+
+### 🔹 Features
+
+* Sends summary after execution
+* Includes:
+
+  * Total files processed
+  * Pass/Fail/Skip counts
+  * Comparison breakdown
+  * Report references
+
+---
+
+## ⚠️ Known Constraints
+
+* PAC requires Windows UI (no CLI support)
+* UI automation depends on timing
+* PREP requires local JAR server
+* Excel files may get locked temporarily
+
+---
+
+## 🧪 Test Coverage
+
+* Empty input handling
+* Invalid folders
+* Corrupted PDFs
+* API failures
+* Timeout handling
+* Slack failure resilience
+* Re-run overwrite handling
+
+📌 Based on detailed test cases (*Documentation Pages 6–16*).
+
+---
+
+## 📈 Impact
+
+* Automated manual accessibility validation
+* Enabled scalable batch processing
+* Reduced human effort significantly
+* Improved reporting accuracy
+* Unified multiple tools into one pipeline
+
+---
+
+## 🔐 Security
+
+* Secrets stored in `.env`
+* `.env` excluded via `.gitignore`
+* Secure handling of API tokens
+
+---
+
+## 🌟 Future Enhancements
+
+* Full PAC automation improvements
+* Web dashboard for reporting
+* Cloud deployment support
+* Advanced analytics
+
+---
+
+
 
 ## Author
 - Name: akash gogineni
