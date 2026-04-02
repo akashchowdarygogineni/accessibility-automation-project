@@ -274,13 +274,31 @@ CHANNEL_ID=your-channel-id
 
 ---
 
-## 📈 Impact
 
-* Automated manual accessibility validation
-* Enabled scalable batch processing
-* Reduced human effort significantly
-* Improved reporting accuracy
-* Unified multiple tools into one pipeline
+
+---
+
+## ⚠️ Design Considerations
+PAC is a desktop UI-based tool and does not support CLI/API execution
+UI automation is implemented using pywinauto
+PREP runs via a local JAR service
+Pipeline is designed to handle failures, retries, and partial execution
+
+---
+
+## 📈 Results & Impact
+✅ Automated end-to-end accessibility validation
+✅ Reduced manual effort significantly (~60–70%)
+✅ Enabled batch processing of multiple PDFs
+✅ Improved reporting accuracy and consistency
+✅ Integrated multiple tools into a unified pipeline
+
+---
+
+## 🙌 Acknowledgements
+PAC (PDF Accessibility Checker)
+PREP (PDF Remediation Tool - JAR API)
+Slack API for notifications
 
 ---
 
